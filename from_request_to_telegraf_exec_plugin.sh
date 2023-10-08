@@ -2,7 +2,9 @@
 
 for k in  $(echo $(kubectl get pods -l app=frontend -n sunhwa -o jsonpath="{.items[*]}") | jq '[.metadata.name, .spec.containers[0].resources.requests]' | jq -s '.'| jq -c '.[]'); do
         name=$(echo ${k} | jq '.[0]');
-        cpu=$(echo ${k} | jq '.[1].cpu');
+        name=$(echo $name | sed 's/"//g')
+	cpu=$(echo ${k} | jq '.[1].cpu');
+	
         if [[ ${cpu} == *"m"* ]]; then
                 cpuCore=$(echo $cpu | sed -e "s/m//g")
                 cpuCore=$(echo $cpuCore | sed 's/"//g')
