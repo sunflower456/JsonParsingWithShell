@@ -17,3 +17,7 @@ vpa_target_info,vpa_name=frontend-vpa,resource=memory,recommendation=uncappedTar
 ---
 telegraf --config ./telegraf.conf
 
+---
+- VPA metric -> telegraf metric
+- get from kubectl cmd line
+- parsing with jq
