@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for k in  $(echo $(kubectl get pods -l app=frontend -n sunhwa -o jsonpath="{.items[*]}") | jq '[.metadata.name, .spec.containers[0].resources.requests]' | jq -s '.'| jq -c '.[]'); do
+for k in  $(echo $(kubectl get pods -l frontend -n app=sunhwa -o jsonpath="{.items[*]}") | jq '[.metadata.name, .spec.containers[0].resources.requests]' | jq -s '.'| jq -c '.[]'); do
         name=$(echo ${k} | jq '.[0]');
         cpu=$(echo ${k} | jq '.[1].cpu');
         if [[ ${cpu} == *"m"* ]]; then
@@ -22,7 +22,14 @@ for k in  $(echo $(kubectl get pods -l app=frontend -n sunhwa -o jsonpath="{.ite
                 memBytes=$(echo $((mem)))
                 bytes=1000
                 memresult=$(bc -l <<< $((memBytes))*$((bytes)))
-        else
+    elif [[ ${memory} == *"Mi"* ]]; then
+	        mem=$(echo $memory | sed -e "s/Mi//g")
+                mem=$(echo $mem | sed 's/"//g')
+                memBytes=$(echo $((mem)))
+                bytes=9.5367e-7
+                memresult=$(bc -l <<< $((memBytes))*$((bytes)))
+    else
+
                 memory=$(echo ${memory} | sed 's/"//g')
                 memresult=$((memory))
 	fi
