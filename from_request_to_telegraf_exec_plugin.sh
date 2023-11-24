@@ -26,7 +26,7 @@ for k in  $(echo $(kubectl get pods -l frontend -n app=sunhwa -o jsonpath="{.ite
 	        mem=$(echo $memory | sed -e "s/Mi//g")
                 mem=$(echo $mem | sed 's/"//g')
                 memBytes=$(echo $((mem)))
-                bytes=9.5367e-7
+                bytes=1000000
                 memresult=$(bc -l <<< $((memBytes))*$((bytes)))
     else
 
